@@ -4,7 +4,6 @@ class Toy {
     private final Integer idToy;
     private final Integer dropToy;
     private final String nameToy;
-    private String inputData;
 
     public Toy(String inputData) {
         String[] data = inputData.split(" ");
