@@ -1,5 +1,7 @@
 package toyshop;
 
+import java.lang.reflect.Array;
+
 class Toy {
     private final Integer idToy;
     private final Integer dropToy;
@@ -22,6 +24,11 @@ class Toy {
 
     public String getNameToy() {
         return nameToy;
+    }
+
+    @Override
+    public String toString() {
+        return idToy.toString() + ' ' + dropToy.toString() + ' ' + nameToy;
     }
 
 }
