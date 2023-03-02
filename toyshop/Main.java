@@ -1,5 +1,6 @@
 package toyshop;
 
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 public class Main {
@@ -14,6 +15,7 @@ public class Main {
         System.out.println(toy1.getNameToy());
 
         System.out.println(toy3.toString());
+        System.out.println(Arrays.toString(toy3.getDataToy()));
 
     }
 }
