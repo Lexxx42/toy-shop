@@ -11,8 +11,8 @@ import java.util.*;
 public class Controller {
     Queue<Toy> toysQueue = new ArrayDeque<>();
     private final int numberOfPrizes = 5;
-    private final String csvPrizes = "Prizes.csv";
-    private final String csvToys = "Toys.csv";
+    private final String csvPrizes = "Winners.csv";
+    private final String csvToys = "StorageToys.csv";
     private ArrayList<Toy> toysList;
 
     protected void run() {
@@ -22,7 +22,7 @@ public class Controller {
             manageChosenToy(chosenToy);
         }
         System.out.println(toysQueue);
-        writePrizes();
+        writeWinners();
     }
 
     private void dropChance() {
@@ -43,10 +43,10 @@ public class Controller {
     protected void manageChosenToy(Toy toy) {
         toy.setToyQuantity(toy.getToyQuantity() - 1);
         String info = '\n' +
-                "Выбрана игрушка: " +
+                "Picked Toy: " +
                 toy.getToyName() +
                 ". " +
-                "Таких игрушек осталось: " +
+                "Toys left: " +
                 toy.getToyQuantity() +
                 '\n';
         System.out.println(info);
@@ -70,7 +70,7 @@ public class Controller {
         return sb.toString();
     }
 
-    protected void writePrizes() {
+    protected void writeWinners() {
         final Path path = Paths.get(csvPrizes);
         while (!toysQueue.isEmpty()) {
             Toy toy = toysQueue.poll();
