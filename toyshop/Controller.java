@@ -61,16 +61,14 @@ public class Controller {
     }
 
     private String makeStringForCSV(Toy toy) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(toy.getToyId());
-        sb.append(';');
-        sb.append(toy.getDropChance());
-        sb.append(';');
-        sb.append(toy.getToyName());
-        sb.append(';');
-        sb.append(toy.getToyQuantity());
-        sb.append('\n');
-        return sb.toString();
+        return String.valueOf(toy.getToyId()) +
+                ';' +
+                toy.getDropChance() +
+                ';' +
+                toy.getToyName() +
+                ';' +
+                toy.getToyQuantity() +
+                '\n';
     }
 
     protected void writeWinners() throws IOException {
@@ -85,7 +83,7 @@ public class Controller {
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
                 writer.append(str);
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -96,14 +94,14 @@ public class Controller {
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
             writer.append(str1);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         for (int i = 1; i < toysList.size(); i++) {
             String str2 = makeStringForCSV(toysList.get(i));
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
                 writer.append(str2);
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -168,7 +166,7 @@ public class Controller {
         try (Writer writer = Files.newBufferedWriter(Paths.get(csvToys), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
             writer.append(str);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
