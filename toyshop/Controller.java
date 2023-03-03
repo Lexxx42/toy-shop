@@ -105,7 +105,7 @@ public class Controller {
         toysList = new ArrayList<>();
         File csvFile = new File(csvToys);
         if (csvFile.isFile()) {
-            BufferedReader csvReader = null;
+            BufferedReader csvReader;
             try {
                 csvReader = new BufferedReader(new FileReader(csvToys));
             } catch (FileNotFoundException e) {
