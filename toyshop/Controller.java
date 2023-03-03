@@ -74,9 +74,13 @@ public class Controller {
     protected void writeWinners() throws IOException {
         String csvWinners = "Winners.csv";
         File winCSV = new File(csvWinners);
-        winCSV.createNewFile();
-
+        boolean fileCreated = winCSV.createNewFile();
         final Path path = Paths.get(csvWinners);
+        if (!fileCreated && !winCSV.exists()) {
+            throw new IOException("Unable to create a file at specified path.");
+        }
+
+
         while (!toysQueue.isEmpty()) {
             Toy toy = toysQueue.poll();
             String str = makeStringForCSV(toy);
