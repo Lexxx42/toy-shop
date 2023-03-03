@@ -13,19 +13,19 @@ public class Controller {
     private final String csvToys = "StorageToys.csv";
     private ArrayList<Toy> toysList;
 
-    protected void run() {
+    protected void run() throws IOException {
         dropChance();
-        int numberOfPrizes = 5;
+        int numberOfPrizes = 10;
         for (int i = 1; i <= numberOfPrizes; i++) {
             Toy chosenToy = chooseToy();
-            manageChosenToy(chosenToy);
+            manageToy(chosenToy);
         }
         System.out.println(toysQueue);
         writeWinners();
     }
 
     private void dropChance() {
-        importListToCSV();
+        exportListToCSV();
     }
 
     protected Toy chooseToy() {
@@ -39,7 +39,7 @@ public class Controller {
         }
     }
 
-    protected void manageChosenToy(Toy toy) {
+    protected void manageToy(Toy toy) {
         toy.setToyQuantity(toy.getToyQuantity() - 1);
         String info = '\n' +
                 "Picked Toy: " +
@@ -53,7 +53,7 @@ public class Controller {
             toysList.remove(toy);
         }
         toysQueue.add(toy);
-        importListToCSV();
+        exportListToCSV();
     }
 
     private String makeStringForCSV(Toy toy) {
@@ -69,9 +69,12 @@ public class Controller {
         return sb.toString();
     }
 
-    protected void writeWinners() {
-        String csvPrizes = "Winners.csv";
-        final Path path = Paths.get(csvPrizes);
+    protected void writeWinners() throws IOException {
+        String csvWinners = "Winners.csv";
+        File winCSV = new File(csvWinners);
+        winCSV.createNewFile();
+
+        final Path path = Paths.get(csvWinners);
         while (!toysQueue.isEmpty()) {
             Toy toy = toysQueue.poll();
             String str = makeStringForCSV(toy);
@@ -83,7 +86,7 @@ public class Controller {
         }
     }
 
-    protected void importListToCSV() {
+    protected void exportListToCSV() {
         String str1 = makeStringForCSV(toysList.get(0));
         Path path = Paths.get(csvToys);
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
