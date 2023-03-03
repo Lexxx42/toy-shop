@@ -6,7 +6,7 @@ Toy-shop app (JAVA)
 
 ## Project information
 
-It is necessary to develop a project for a draw in a toy store.
+It is necessary to develop a project for a lottery in a toy store.
 The functionality should include adding new toys and setting the weight for toys to fall out.
 
 ---
