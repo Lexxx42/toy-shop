@@ -10,13 +10,12 @@ import java.util.*;
 
 public class Controller {
     Queue<Toy> toysQueue = new ArrayDeque<>();
-    private final int numberOfPrizes = 5;
-    private final String csvPrizes = "Winners.csv";
     private final String csvToys = "StorageToys.csv";
     private ArrayList<Toy> toysList;
 
     protected void run() {
         dropChance();
+        int numberOfPrizes = 5;
         for (int i = 1; i <= numberOfPrizes; i++) {
             Toy chosenToy = chooseToy();
             manageChosenToy(chosenToy);
@@ -71,12 +70,13 @@ public class Controller {
     }
 
     protected void writeWinners() {
+        String csvPrizes = "Winners.csv";
         final Path path = Paths.get(csvPrizes);
         while (!toysQueue.isEmpty()) {
             Toy toy = toysQueue.poll();
             String str = makeStringForCSV(toy);
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-                writer.append(str.toString());
+                writer.append(str);
             } catch (IOException e) {
                 System.out.println(e);
             }
@@ -87,14 +87,14 @@ public class Controller {
         String str1 = makeStringForCSV(toysList.get(0));
         Path path = Paths.get(csvToys);
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-            writer.append(str1.toString());
+            writer.append(str1);
         } catch (IOException e) {
             System.out.println(e);
         }
         for (int i = 1; i < toysList.size(); i++) {
             String str2 = makeStringForCSV(toysList.get(i));
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-                writer.append(str2.toString());
+                writer.append(str2);
             } catch (IOException e) {
                 System.out.println(e);
             }
@@ -159,7 +159,7 @@ public class Controller {
     private void addToyToCSV(Toy toy) {
         String str = makeStringForCSV(toy);
         try (Writer writer = Files.newBufferedWriter(Paths.get(csvToys), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-            writer.append(str.toString());
+            writer.append(str);
         } catch (IOException e) {
             System.out.println(e);
         }
