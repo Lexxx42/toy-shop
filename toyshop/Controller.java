@@ -6,27 +6,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.Scanner;
+
 
 public class Controller {
     Queue<Toy> toysQueue = new ArrayDeque<>();
-    private final int numberOfPrizes = 5;
-    private final String csvPrizes = "Winners.csv";
     private final String csvToys = "StorageToys.csv";
     private ArrayList<Toy> toysList;
 
-    protected void run() {
+    protected void run() throws IOException {
         dropChance();
+        int numberOfPrizes = 10;
         for (int i = 1; i <= numberOfPrizes; i++) {
             Toy chosenToy = chooseToy();
-            manageChosenToy(chosenToy);
+            manageToy(chosenToy);
         }
         System.out.println(toysQueue);
         writeWinners();
     }
 
     private void dropChance() {
-        importListToCSV();
+        exportListToCSV();
     }
 
     protected Toy chooseToy() {
@@ -40,7 +43,7 @@ public class Controller {
         }
     }
 
-    protected void manageChosenToy(Toy toy) {
+    protected void manageToy(Toy toy) {
         toy.setToyQuantity(toy.getToyQuantity() - 1);
         String info = '\n' +
                 "Picked Toy: " +
@@ -54,49 +57,55 @@ public class Controller {
             toysList.remove(toy);
         }
         toysQueue.add(toy);
-        importListToCSV();
+        exportListToCSV();
     }
 
     private String makeStringForCSV(Toy toy) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(toy.getToyId());
-        sb.append(';');
-        sb.append(toy.getDropChance());
-        sb.append(';');
-        sb.append(toy.getToyName());
-        sb.append(';');
-        sb.append(toy.getToyQuantity());
-        sb.append('\n');
-        return sb.toString();
+        return String.valueOf(toy.getToyId()) +
+                ';' +
+                toy.getDropChance() +
+                ';' +
+                toy.getToyName() +
+                ';' +
+                toy.getToyQuantity() +
+                '\n';
     }
 
-    protected void writeWinners() {
-        final Path path = Paths.get(csvPrizes);
+    protected void writeWinners() throws IOException {
+        String csvWinners = "Winners.csv";
+        File winCSV = new File(csvWinners);
+        boolean fileCreated = winCSV.createNewFile();
+        final Path path = Paths.get(csvWinners);
+        if (!fileCreated && !winCSV.exists()) {
+            throw new IOException("Unable to create a file at specified path.");
+        }
+
+
         while (!toysQueue.isEmpty()) {
             Toy toy = toysQueue.poll();
             String str = makeStringForCSV(toy);
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-                writer.append(str.toString());
+                writer.append(str);
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
 
-    protected void importListToCSV() {
+    protected void exportListToCSV() {
         String str1 = makeStringForCSV(toysList.get(0));
         Path path = Paths.get(csvToys);
         try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
-            writer.append(str1.toString());
+            writer.append(str1);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         for (int i = 1; i < toysList.size(); i++) {
             String str2 = makeStringForCSV(toysList.get(i));
             try (Writer writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-                writer.append(str2.toString());
+                writer.append(str2);
             } catch (IOException e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -105,7 +114,7 @@ public class Controller {
         toysList = new ArrayList<>();
         File csvFile = new File(csvToys);
         if (csvFile.isFile()) {
-            BufferedReader csvReader = null;
+            BufferedReader csvReader;
             try {
                 csvReader = new BufferedReader(new FileReader(csvToys));
             } catch (FileNotFoundException e) {
@@ -159,9 +168,9 @@ public class Controller {
     private void addToyToCSV(Toy toy) {
         String str = makeStringForCSV(toy);
         try (Writer writer = Files.newBufferedWriter(Paths.get(csvToys), StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
-            writer.append(str.toString());
+            writer.append(str);
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 

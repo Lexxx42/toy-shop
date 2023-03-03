@@ -4,7 +4,7 @@ import java.util.StringJoiner;
 
 public class Toy {
     private final int toyId;
-    private int dropChance;
+    private final int dropChance;
     private final String toyName;
     private int toyQuantity;
 
@@ -32,10 +32,6 @@ public class Toy {
 
     public int getDropChance() {
         return dropChance;
-    }
-
-    public void setDropChance(int dropChance) {
-        this.dropChance = dropChance;
     }
 
     public int getToyId() {
